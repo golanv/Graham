@@ -20,15 +20,19 @@ public class Graham {
 		prop.load(input);
 
 		// get the property value and print it out
+                
+                // Process Volume Group Pool location
                 System.out.print("VG Pool: ");
                 System.out.println(prop.getProperty("pool"));
 
+                // Process VM Names
                 System.out.print("VMs: ");
                 String[] db = prop.getProperty("vm").split(",");
                 for (int i = 0; i < db.length; i++) {
                     System.out.print(db[i] + ", ");
-                    
                 }
+                
+                // Process Virtual Disks
 
 	} catch (IOException ex) {
 		ex.printStackTrace();
