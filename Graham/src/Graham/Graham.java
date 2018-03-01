@@ -110,27 +110,41 @@ public class Graham {
 
 
 
-            // Call snapshot.create
+            
 
-            //Snapshot Snap = new Snapshot();
+	} catch (IOException ex) {
+		ex.printStackTrace();
+	} finally {
+            if (input != null) {
+                try {
+                        input.close();
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+            }
+	}
+        
+        // Call snapshot.create
+
+            //Snapshot Snap = new Snapshot();A
             //String snapshot = Snap.Snapper("Blob");
 
             for (int i = 0; i < virtM.size(); i++) {
                 System.out.println("Backing up " + virtM.get(i).getName() + "...");
                 String[] diskArray = virtM.get(i).getDisks();
                 for (int j = 0; j < diskArray.length; j++) {
+                    // Create snapshot object instance
+                    Snapshot Snapper = new Snapshot(virtM.get(i).getPool(), diskArray[j]);
+                    
                     // Create Snapshot
-                    Snapshot Snapper = new Snapshot(pool, diskArray[j]);
-                    Snapper.testVars();
-                    //String snapshot = Snap.Snapper(diskArray[j]);
-                    //System.out.println(diskArray[j]);
-                    //System.out.println(snapshot);
-
+                    Snapper.create();
+                    
                     // Copy Disk
 
                     // Checksum
 
                     // Remove snapshot
+                    Snapper.remove();
 
                     // Call mailer/logger
 
@@ -146,19 +160,6 @@ public class Graham {
             // Call mailer or logger
 
 
-
-	} catch (IOException ex) {
-		ex.printStackTrace();
-	} finally {
-            if (input != null) {
-                try {
-                        input.close();
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
-            }
-	}
-        
         
     }
     

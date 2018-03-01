@@ -18,10 +18,7 @@ public class Snapshot {
     private String disk;
     private String pool;
     
-    private String[] cSnap = {"lvcreate", "-L1G", "-s", "-n", pool + snapshot, pool + disk};
-    //private String createSnap = "lvcreate -L1g -s -n " + pool + snapshot + " " + pool + disk;
-    private String[] rSnap = {"lvremove", pool + snapshot};
-    //private String removeSnap = "lvremove " + pool + snapshot;
+    // Constructors 
     
     public Snapshot() {
         
@@ -33,17 +30,18 @@ public class Snapshot {
         this.snapshot = disk + "_snapshot";
     }
     
+    
     public void testVars() {
         System.out.println("Pool: " + pool);
         System.out.println("Disk: " + disk);
         System.out.println("Snapshot: " + snapshot);
+        //System.out.println("lvcreate -L1G -s -n " + pool + snapshot + " " + pool + disk);
     }
     
-    // Mutators
-    
     public void create() {
+        String[] cSnap = {"lvcreate", "-L1G", "-s", "-n", pool + snapshot, pool + disk};
+        // Create snapshot
         try {
-            // Create snapshot
             Runtime.getRuntime().exec(cSnap);
         } catch (IOException ex) {
             Logger.getLogger(Snapshot.class.getName()).log(Level.SEVERE, null, ex);
@@ -51,12 +49,17 @@ public class Snapshot {
     }
     
     public void remove() {
+        String[] rSnap = {"lvremove", pool + snapshot};
+        // Remove snapshot
         try {
-            // Remove snapshot
             Runtime.getRuntime().exec(rSnap);
         } catch (IOException ex) {
             Logger.getLogger(Snapshot.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    // Accessors
+    
+    // Mutators
 
 }
