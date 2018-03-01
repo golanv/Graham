@@ -123,44 +123,31 @@ public class Graham {
                 }
             }
 	}
-        
-        // Call snapshot.create
 
-            //Snapshot Snap = new Snapshot();A
-            //String snapshot = Snap.Snapper("Blob");
+        for (int i = 0; i < virtM.size(); i++) {
+            System.out.println("Backing up " + virtM.get(i).getName() + "...");
+            String[] diskArray = virtM.get(i).getDisks();
+            for (int j = 0; j < diskArray.length; j++) {
+                // Create some variables
+                String pool = virtM.get(i).getPool();
+                String disk = diskArray[j];
+                // Create snapshot object instance
+                Snapshot Snapper = new Snapshot(pool, disk);
 
-            for (int i = 0; i < virtM.size(); i++) {
-                System.out.println("Backing up " + virtM.get(i).getName() + "...");
-                String[] diskArray = virtM.get(i).getDisks();
-                for (int j = 0; j < diskArray.length; j++) {
-                    // Create snapshot object instance
-                    Snapshot Snapper = new Snapshot(virtM.get(i).getPool(), diskArray[j]);
-                    
-                    // Create Snapshot
-                    Snapper.create();
-                    
-                    // Copy Disk
+                // Create Snapshot
+                Snapper.create();
 
-                    // Checksum
+                // Copy Disk
 
-                    // Remove snapshot
-                    Snapper.remove();
+                // Checksum
 
-                    // Call mailer/logger
+                // Remove snapshot
+                Snapper.remove();
 
-                }
+                // Call mailer/logger
+
             }
-
-            // Call disk copy
-
-            // Call sha256sum compare
-
-            // Call snapshot.remove
-
-            // Call mailer or logger
-
-
-        
+        }        
     }
     
 }
