@@ -1,10 +1,9 @@
 /*
  * Snapshot()
  * Version 0.00.01 (Totally safe to compile and use!)
- * 1 March 2018
  * <Copyright info here>
  *
-*/
+ */
 
 package Graham;
 
@@ -49,7 +48,7 @@ public class Snapshot {
     }
     
     public void remove() {
-        String[] rSnap = {"lvremove", pool + snapshot};
+        String[] rSnap = {"lvremove", pool + snapshot, "-y"};
         // Remove snapshot
         try {
             Runtime.getRuntime().exec(rSnap);
@@ -59,6 +58,10 @@ public class Snapshot {
     }
     
     // Accessors
+    
+    public String getSnapshot() {
+        return snapshot;
+    }
     
     // Mutators
 

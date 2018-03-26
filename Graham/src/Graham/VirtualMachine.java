@@ -1,10 +1,9 @@
 /*
  * VirtualMachine()
  * Version 0.00.01 (Totally safe to compile and use!)
- * 28 Feb 2018
  * <Copyright info here>
  *
-*/
+ */
 
 package Graham;
 

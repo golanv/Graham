@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Graham {
+public class testGraham {
 
     public static void main(String[] args) {
         
@@ -33,12 +33,15 @@ public class Graham {
         // Mailer or logger
         
         // If Verification succeeds, remove snapshot
-        new Graham();
+        new testGraham();
     }
     
-   public Graham() {
+   public testGraham() {
         Properties prop = new Properties();
 	InputStream input = null;
+        ArrayList<VirtualMachine> virtM = new ArrayList<>();
+        //String destination = null;
+        //String destPath = "/backup/";
         String destPath = null;
         String[] disks = null;
         String pool = null;
@@ -83,42 +86,53 @@ public class Graham {
 	}
 
         for (int i = 0; i < disks.length; i++) {
-            String disk = disks[i];
-            
-            // Create snapshot object instance
-            Snapshot Snapper = new Snapshot(pool, disk);
+            //System.out.println("Backing up " + virtM.get(i).getName() + "...");
+            //String[] diskArray = virtM.get(i).getDisks();
+            //for (int j = 0; j < diskArray.length; j++) {
+                // Create some variables
+                //String pool = virtM.get(i).getPool();
+                //String disk = diskArray[j];
+                String disk = disks[i];
+                // Create snapshot object instance
+                Snapshot Snapper = new Snapshot(pool, disk);
+                
+                String snap = Snapper.getSnapshot();
+                
 
-            String snap = Snapper.getSnapshot();
+                // Create Snapshot
+                Snapper.create();
+                System.out.println("Dest Path:" + destPath);
+                Snapper.testVars();
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Graham.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            // Create Snapshot
-            Snapper.create();
-            System.out.println("Dest Path:" + destPath);
-            Snapper.testVars();
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Graham.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                try {
+                    // Copy Disk
+                    //Disk ds = new Disk();
+                    
+                    // THIS IS DUMB
+                    Disk.diskCopy(pool, snap, destPath, snap);                    
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(Graham.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                // Checksum
+                    
+                // Remove snapshot
+                Snapper.remove();
+                
+                // Compress output
+                String file = destPath + snap;
+                String gzipFile = destPath + snap + ".gz";
+                Disk.diskCompress(file, gzipFile);
 
-            try {
-                // Copy Disk
+                // Call mailer/logger
 
-                // THIS IS DUMB
-                Disk.diskCopy(pool, snap, destPath, snap);                    
-
-            } catch (IOException ex) {
-                Logger.getLogger(Graham.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            // Checksum
-
-            // Remove snapshot
-            Snapper.remove();
-
-            // Compress output
-            String file = destPath + snap;
-            String gzipFile = destPath + snap + ".gz";
-            Disk.diskCompress(file, gzipFile);
+            //}
         }        
     }
     
