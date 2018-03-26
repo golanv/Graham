@@ -11,32 +11,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Graham {
 
     public static void main(String[] args) {
-        
-        // Read config file which should contain (this should be its own class):
-        // VM name
-        // Disk name
-        // Disk path
-        
-        // Create LVM Snapshot
-        
-        // Copy snapshot to disk image
-        
-        // Backup Verification
-        
-        // Mailer or logger
-        
-        // If Verification succeeds, remove snapshot
-        new Graham();
-    }
-    
-   public Graham() {
         Properties prop = new Properties();
 	InputStream input = null;
         String destPath = null;
@@ -87,8 +68,10 @@ public class Graham {
             
             // Create snapshot object instance
             Snapshot Snapper = new Snapshot(pool, disk);
-
             String snap = Snapper.getSnapshot();
+            
+            String srcSnap = pool + snap;
+            String dstSnap = destPath + snap;
 
             // Create Snapshot
             Snapper.create();
@@ -100,26 +83,43 @@ public class Graham {
                 Logger.getLogger(Graham.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            // Copy disk
             try {
-                // Copy Disk
-
-                // THIS IS DUMB
-                Disk.diskCopy(pool, snap, destPath, snap);                    
-
+                Disk.diskCopy(srcSnap, dstSnap);
             } catch (IOException ex) {
                 Logger.getLogger(Graham.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            // Checksum
+            try {
+                // Checksum
+                Disk.diskCheckSum(srcSnap, dstSnap);
+            } catch (Exception ex) {
+                Logger.getLogger(Graham.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             // Remove snapshot
             Snapper.remove();
 
             // Compress output
-            String file = destPath + snap;
+            //String file = destPath + snap;
             String gzipFile = destPath + snap + ".gz";
-            Disk.diskCompress(file, gzipFile);
+            Disk.diskCompress(dstSnap, gzipFile);
         }        
+        
+        // Read config file which should contain (this should be its own class):
+        // VM name
+        // Disk name
+        // Disk path
+        
+        // Create LVM Snapshot
+        
+        // Copy snapshot to disk image
+        
+        // Backup Verification
+        
+        // Mailer or logger
+        
+        // If Verification succeeds, remove snapshot
     }
-    
+
 }
