@@ -8,8 +8,6 @@
 package Graham;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -17,7 +15,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.zip.GZIPOutputStream;
-import java.security.MessageDigest;
+//import java.security.MessageDigest;
+import java.util.zip.Checksum;
+
+//import javax.xml.bind.DatatypeConverter;
+import java.io.File;
 
 public class Disk {
     
@@ -35,27 +37,11 @@ public class Disk {
         this.srcDisk = src;
     }
     
-    public static void diskCopy(String srcPath, String srcDisk, String destPath,  String destDisk) throws IOException {
-        // File Stream
-//        InputStream is = null;
-//        OutputStream os = null;
-//        try {
-//            is = new FileInputStream(srcPath + srcDisk);
-//            os = new FileOutputStream(destPath + destDisk);
-//            byte[] buffer = new byte[1024];
-//            int length;
-//            while ((length = is.read(buffer)) > 0 ) {
-//                os.write(buffer, 0, length);
-//            }
-//        } finally {
-//            is.close();
-//            os.close();
-//        }
-
+    public static void diskCopy(String src, String dst) throws IOException {
         // Files.copy() class
-        Path src = Paths.get(srcPath + srcDisk);
-        Path dst = Paths.get(destPath + destDisk);
-        Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING);
+        Path srcDisk = Paths.get(src);
+        Path dstDisk = Paths.get(dst);
+        Files.copy(srcDisk, dstDisk, StandardCopyOption.REPLACE_EXISTING);
         
     }
     
@@ -79,7 +65,16 @@ public class Disk {
         
     }
     
-    
-    
+    public static void diskCheckSum(String src, String dst) throws Exception {
+        File srcDisk = new File(src);
+        File dstDisk = new File(dst);
+        
+        if (!Hash.toHex(Hash.SHA256.checksum(srcDisk)).equals(Hash.toHex(Hash.SHA256.checksum(dstDisk)))) {
+            System.out.println("ERROR BRO!");
+        } else {
+            System.out.println("Checksum was awesome");
+        }
+
+    }   
 
 }
