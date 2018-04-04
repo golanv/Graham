@@ -29,7 +29,7 @@ class Disk:
         
     def checksum(self, n):
         file_f = open(n, 'rb')
-        hash_h = hashlib.new('sha256')
+        hash_h = hashlib.sha256()
         for chunk in self.chunker(file_f, 4096):
             hash_h.update(chunk)
         print((hash_h.hexdigest()))
