@@ -22,7 +22,23 @@ class Disk:
             print("Unexpected error:", sys.exc_info())
             
     def diskCheckSum(self, src, dst):
-        if hashlib.sha256(src) == hashlib.sha256(dst):
-            print("Disks are equal")
+        if self.checksum(src) == self.checksum(dst):
+            return True
         else:
-            print("Disks are not equal")           
+            return False
+        
+    def checksum(self, n):
+        file_f = open(n, 'rb')
+        hash_h = hashlib.new('sha256')
+        for chunk in self.chunker(file_f, 4096):
+            hash_h.update(chunk)
+        print((hash_h.hexdigest()))
+        return hash_h.hexdigest()
+        file_f.close()
+
+    def chunker(self, fileobj, size):
+        while True:
+            data = fileobj.read(size)
+            if not data:
+                return
+            yield data

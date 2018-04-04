@@ -22,7 +22,7 @@ def main(args):
         # Create snapshot object instance
         Snapper = Snapshot (pool, disk)
         snap = Snapper.getSnapshot()
-        print(snap)                                     # Remove line
+        #print(snap)                                     # Remove line
         
         # More vars
         srcSnap = pool + snap
@@ -31,13 +31,16 @@ def main(args):
         # Create Snapshot
         Snapper.create()
         sleep(10)
-        print("Destination Path: " + destPath)          # Remove line
+        #print("Destination Path: " + destPath)          # Remove line
         
         # Copy disk
         Disk().diskCopy(srcSnap, dstSnap)
         
         # Checksum
-        
+        if (Disk().diskCheckSum(srcSnap, dstSnap)):
+            print("Disk " + disk + " backed up successfully")   # Remove Line
+        else:
+            print("Disk " + disk + " backup failed")            # Remove Line
 
         
 if __name__ == '__main__':
