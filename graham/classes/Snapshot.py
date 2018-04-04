@@ -18,3 +18,9 @@ class Snapshot():
         snapshot = self.snapshot
         disk = self.disk
         subprocess.call("lvcreate -L1G -s -n" + pool + snapshot + " " + pool + disk, shell=True)
+        
+    def remove(self):
+        pool = self.pool
+        snapshot = self.snapshot
+        disk = self.disk
+        subprocess.call("lvremove " + pool + snapshot + " -y", shell=True)

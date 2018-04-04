@@ -41,6 +41,9 @@ def main(args):
             print("Disk " + disk + " backed up successfully")   # Remove Line
         else:
             print("Disk " + disk + " backup failed")            # Remove Line
+            
+        # Remove snapshot
+        Snapper.remove()
 
         
 if __name__ == '__main__':
