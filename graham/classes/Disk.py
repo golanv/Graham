@@ -3,6 +3,7 @@ import subprocess
 import shutil
 import hashlib
 
+
 class Disk:
     srcPath = None
     destPath = None
