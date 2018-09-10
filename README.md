@@ -1,2 +1,2 @@
 # Graham
-Project Graham is just a collection of scripts used for some servers.
+Project Graham is a python program for backing up KVM virtual machines on LVM.
