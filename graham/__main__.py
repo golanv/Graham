@@ -34,16 +34,26 @@ def main(args):
         #print("Destination Path: " + destPath)          # Remove line
         
         # Copy disk
+        print("Copying disk snapshot to backup location...")
         Disk().diskCopy(srcSnap, dstSnap)
         
         # Checksum
+        print("Verifying disk backup integrity...")
         if (Disk().diskCheckSum(srcSnap, dstSnap)):
-            print("Disk " + disk + " backed up successfully")   # Remove Line
+            print("Disk " + disk + " backed up successfully!")   # Remove Line
         else:
-            print("Disk " + disk + " backup failed")            # Remove Line
+            print("Disk " + disk + " backup failed!")            # Remove Line
             
         # Remove snapshot
+        print("Removing snapshot...")
         Snapper.remove()
+
+        # Compress disk
+        print("Compressing backup disk image...")
+        Disk().compress(disk, dstSnap, destPath)
+
+        # Remove uncompressed backup image
+        Disk().remove(dstSnap)
 
         
 if __name__ == '__main__':
