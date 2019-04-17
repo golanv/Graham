@@ -14,7 +14,7 @@ class Disk:
     
     def __init__(self):
         return
-    
+
     def set_src_path(self, srcpath):
         self.srcPath = srcpath
 
@@ -26,6 +26,12 @@ class Disk:
 
     def set_dst_disk(self, dstdisk):
         self.destDisk = dstdisk
+
+    def diskCopy(self):
+        try:
+            shutil.copy2(self.srcPath + self.srcDisk, self.dstPath + self.srcDisk)
+        except IOError as e:
+            print("Unable to copy file. %s" % e)
 
     @staticmethod
     def diskCopy(src, dst):

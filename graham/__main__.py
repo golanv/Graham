@@ -42,7 +42,7 @@ def main(args):
         
         # Copy disk
         print("Copying disk snapshot to backup location...")
-        disker.diskCopy(srcSnap, dstSnap)
+        disker.diskCopy()
         
         # Checksum
         print("Verifying disk backup integrity...")
