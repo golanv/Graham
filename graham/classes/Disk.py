@@ -9,8 +9,8 @@ import os
 class Disk:
     srcPath = None
     destPath = None
-    srcDisk = None
-    destDisk = None
+    # srcDisk = None
+    # destDisk = None
     
     def __init__(self):
         return
@@ -20,37 +20,35 @@ class Disk:
 
     def set_dst_path(self, dstpath):
         self.destPath = dstpath
+    #
+    # def set_src_disk(self, srcdisk):
+    #     self.srcDisk = srcdisk
+    #
+    # def set_dst_disk(self, dstdisk):
+    #     self.destDisk = dstdisk
 
-    def set_src_disk(self, srcdisk):
-        self.srcDisk = srcdisk
-
-    def set_dst_disk(self, dstdisk):
-        self.destDisk = dstdisk
-
-    def diskCopy(self):
+    def disk_copy(self):
         try:
-            shutil.copy2(self.srcPath + self.srcDisk, self.dstPath + self.srcDisk)
+            shutil.copy2(self.srcPath, self.destPath)
         except IOError as e:
             print("Unable to copy file. %s" % e)
 
     @staticmethod
-    def diskCopy(src, dst):
+    def disk_copy(src, dst):
         try:
             shutil.copy2(src, dst)
         except IOError as e:
             print("Unable to copy file. %s" % e)
-        except:
-            print("Unexpected error:", sys.exc_info())
 
     @staticmethod
-    def compress(dsk, snap, path):
-        with open(snap, 'rb') as data:
-            with bz2.BZ2File(path + dsk + ".bz2", 'wb') as outfile:
+    def compress(source, dest):
+        with open(source, 'rb') as data:
+            with bz2.BZ2File(dest + ".bz2", 'wb') as outfile:
                 copyfileobj(data, outfile)
 
-    @staticmethod
-    def remove(dsk):
-        if (dsk):
+    def remove(self):
+        dsk = self.destPath
+        if(dsk):
             try:
                 os.remove(dsk)
                 print("Uncompressed backup image removed")
@@ -59,8 +57,8 @@ class Disk:
         else:
             print("Sorry, I can not find $s file." % dsk)
 
-    def diskCheckSum(self, src, dst):
-        if self.checksum(src) == self.checksum(dst):
+    def disk_check_sum(self):
+        if self.checksum(self.srcPath) == self.checksum(self.destPath):
             return True
         else:
             return False

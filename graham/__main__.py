@@ -6,6 +6,7 @@ import sys
 import configparser
 from time import sleep
 
+
 def main(args):
     #print(args)
     destPath = None
@@ -23,30 +24,27 @@ def main(args):
         snapper = Snapshot(pool, disk)
         snap = snapper.getSnapshot()
         disker = Disk()
-        #print(snap)                                     # Remove line
 
-        # Setup Disk() instance variables
-        disker.set_src_path(pool)
-        disker.set_src_disk(snap)
-        disker.set_dst_path(destPath)
-        disker.set_dst_disk(disk)
-        
-        # More vars
+        # Vars
         srcSnap = pool + snap
         dstSnap = destPath + snap
-        
+
+        # Setup Disk() instance variables
+        disker.set_src_path(srcSnap)
+        disker.set_dst_path(dstSnap)
+        # disker.set_dst_disk(disk)
+
         # Create Snapshot
         snapper.create()
         sleep(10)
-        #print("Destination Path: " + destPath)          # Remove line
-        
+
         # Copy disk
         print("Copying disk snapshot to backup location...")
-        disker.diskCopy()
+        disker.disk_copy()
         
         # Checksum
         print("Verifying disk backup integrity...")
-        if (disker.diskCheckSum(srcSnap, dstSnap)):
+        if (disker.disk_check_sum()):
             print("Disk " + disk + " backed up successfully!")   # Remove Line
         else:
             print("Disk " + disk + " backup failed!")            # Remove Line
@@ -57,10 +55,12 @@ def main(args):
 
         # Compress disk
         print("Compressing backup disk image...")
-        disker.compress(disk, dstSnap, destPath)
+        disker.compress(dstSnap, dstSnap)
+        # disker.compress(disk, dstSnap, destPath)
 
         # Remove uncompressed backup image
-        disker.remove(dstSnap)
+        print("Removing backup disk...")
+        disker.remove()
 
         
 if __name__ == '__main__':
