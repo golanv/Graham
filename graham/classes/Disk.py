@@ -12,9 +12,20 @@ class Disk:
     srcDisk = None
     destDisk = None
     
-    # def __init__(self, path, src):
-        # self.srcPath = path
-        # self.srcDisk = src
+    def __init__(self):
+        return
+    
+    def set_src_path(self, srcpath):
+        self.srcPath = srcpath
+
+    def set_dst_path(self, dstpath):
+        self.destPath = dstpath
+
+    def set_src_disk(self, srcdisk):
+        self.srcDisk = srcdisk
+
+    def set_dst_disk(self, dstdisk):
+        self.destDisk = dstdisk
 
     @staticmethod
     def diskCopy(src, dst):
@@ -36,29 +47,26 @@ class Disk:
         if (dsk):
             try:
                 os.remove(dsk)
+                print("Uncompressed backup image removed")
             except OSError as e:
                 print("Error: %s - %s." % (e.filename,e.strerror))
         else:
             print("Sorry, I can not find $s file." % dsk)
 
-
-
-    @staticmethod
     def diskCheckSum(self, src, dst):
         if self.checksum(src) == self.checksum(dst):
             return True
         else:
             return False
 
-    @staticmethod
     def checksum(self, n):
         file_f = open(n, 'rb')
         hash_h = hashlib.sha256()
         for chunk in self.chunker(file_f, 4096):
             hash_h.update(chunk)
         print((hash_h.hexdigest()))
-        return hash_h.hexdigest()
         file_f.close()
+        return hash_h.hexdigest()
 
     @staticmethod
     def chunker(fileobj, size):
