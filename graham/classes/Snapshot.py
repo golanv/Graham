@@ -10,7 +10,7 @@ class Snapshot():
         self.disk = disk
         self.snapshot = disk + "_snapshot"
 
-    def getSnapshot(self):
+    def get_snapshot(self):
         return self.snapshot
     
     def create(self):

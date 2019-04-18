@@ -9,8 +9,6 @@ import os
 class Disk:
     srcPath = None
     destPath = None
-    # srcDisk = None
-    # destDisk = None
     
     def __init__(self):
         return
@@ -20,31 +18,12 @@ class Disk:
 
     def set_dst_path(self, dstpath):
         self.destPath = dstpath
-    #
-    # def set_src_disk(self, srcdisk):
-    #     self.srcDisk = srcdisk
-    #
-    # def set_dst_disk(self, dstdisk):
-    #     self.destDisk = dstdisk
 
     def disk_copy(self):
         try:
             shutil.copy2(self.srcPath, self.destPath)
         except IOError as e:
-            print("Unable to copy file. %s" % e)
-
-    @staticmethod
-    def disk_copy(src, dst):
-        try:
-            shutil.copy2(src, dst)
-        except IOError as e:
-            print("Unable to copy file. %s" % e)
-
-    @staticmethod
-    def compress(source, dest):
-        with open(source, 'rb') as data:
-            with bz2.BZ2File(dest + ".bz2", 'wb') as outfile:
-                copyfileobj(data, outfile)
+            print("Unable to copy file: %s" % e)
 
     def remove(self):
         dsk = self.destPath
@@ -79,3 +58,13 @@ class Disk:
             if not data:
                 return
             yield data
+
+    @staticmethod
+    def compress(source, dest):
+        if "_snapshot" in dest:
+            dest = dest.split("_snapshot")[0] + ".img"
+        else:
+            dest = dest + ".img"
+        with open(source, 'rb') as data:
+            with bz2.BZ2File(dest + ".bz2", 'wb') as outfile:
+                copyfileobj(data, outfile)
