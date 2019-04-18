@@ -24,15 +24,28 @@ def validate_sysargs(arglist):
 
 
 def main(args):
+    # Search for verbose flag
+    verbose = 0
+    tmpargs = []
+    for arg in range(0, len(args)):
+        if args[arg] == "-v" or args[arg] == "--verbose":
+            verbose = 1
+        else:
+            tmpargs.append(args[arg])
+    args = tmpargs
+
+    # Validate args
     if not validate_sysargs(args):
         exit(0)
+    arglength = len(sys.argv)
+
+    # Process config
     config = configparser.ConfigParser()
     config.read('/etc/graham.conf')
     destPath = config['DEFAULT']['destination']
     pool = config['DEFAULT']['pool']
     disks = config['DEFAULT']['disk'].split(",")
-    arglength = len(sys.argv)
-    
+
     for disk in disks:
         # Create snapshot and disk object instances
         snapper = Snapshot(pool, disk)
@@ -53,18 +66,23 @@ def main(args):
 
         if arglength == 1:
             # Copy disk
-            print("Copying disk snapshot to backup location...")
+            if verbose == 1:
+                print("Copying disk snapshot to backup location...")
             disker.disk_copy()
 
             # Checksum
-            print("Verifying disk backup integrity...")
+            if verbose == 1:
+                print("Verifying disk backup integrity...")
             if (disker.disk_check_sum()):
                 print("Disk " + disk + " backed up successfully!")   # Remove Line
             else:
-                print("Disk " + disk + " backup failed!")            # Remove Line
+                print("Disk " + disk + " backup failed!\nExiting...")            # Remove Line
+                snapper.remove()
+                exit(0)
 
             # Remove snapshot
-            print("Removing snapshot...")
+            if verbose == 1:
+                print("Removing snapshot...")
             snapper.remove()
 
             print("Disk backup completed successfully.")
@@ -72,51 +90,65 @@ def main(args):
         elif arglength == 2:
             if sys.argv[1] == "--oneshot":
                 # Copy disk
-                print("Copying disk snapshot to backup location...")
+                if verbose == 1:
+                    print("Copying disk snapshot to backup location...")
                 disker.disk_copy()
 
                 # Remove snapshot
-                print("Removing snapshot...")
+                if verbose == 1:
+                    print("Removing snapshot...")
                 snapper.remove()
 
-                print("Disk backup completed successfully.")
+                if verbose == 1:
+                    print("Disk backup completed successfully.")
                 exit(0)
             elif sys.argv[1] == "--bz2":
                 # Copy disk
-                print("Copying disk snapshot to backup location...")
+                if verbose == 1:
+                    print("Copying disk snapshot to backup location...")
                 disker.disk_copy()
 
                 # Checksum
-                print("Verifying disk backup integrity...")
+                if verbose == 1:
+                    print("Verifying disk backup integrity...")
                 if (disker.disk_check_sum()):
                     print("Disk " + disk + " backed up successfully!")  # Remove Line
                 else:
-                    print("Disk " + disk + " backup failed!")  # Remove Line
+                    print("Disk " + disk + " backup failed!\nExiting...")  # Remove Line
+                    snapper.remove()
+                    exit(0)
 
                 # Remove snapshot
-                print("Removing snapshot...")
+                if verbose == 1:
+                    print("Removing snapshot...")
                 snapper.remove()
 
                 # Compress disk
-                print("Compressing backup disk image...")
+                if verbose == 1:
+                    print("Compressing backup disk image...")
                 disker.compress(dstSnap, dstSnap)
 
                 # Remove uncompressed backup image
-                print("Removing backup disk...")
+                if verbose == 1:
+                    print("Removing backup disk...")
                 disker.remove()
 
-                print("Disk backup completed successfully.")
+                if verbose == 1:
+                    print("Disk backup completed successfully.")
                 exit(0)
         elif arglength == 3:
             # Compress disk
-            print("Compressing backup disk image...")
+            if verbose == 1:
+                print("Compressing backup disk image...")
             disker.compress(srcSnap, dstSnap)
 
             # Remove snapshot
-            print("Removing snapshot...")
+            if verbose == 1:
+                print("Removing snapshot...")
             snapper.remove()
 
-            print("Disk backup completed successfully.")
+            if verbose == 1:
+                print("Disk backup completed successfully.")
             exit(0)
         else:
             print("Use a valid argument.")
