@@ -34,10 +34,16 @@ def main(args):
             tmpargs.append(args[arg])
     args = tmpargs
 
+    # print("verbose: ", verbose)
+    # print("tmpargs: ", tmpargs)
+    # print("args: ", args)
+    # print("arglength: ", len(args))
+    # exit(0)
+
     # Validate args
     if not validate_sysargs(args):
         exit(0)
-    arglength = len(sys.argv)
+    arglength = len(args)
 
     # Process config
     config = configparser.ConfigParser()
@@ -73,7 +79,7 @@ def main(args):
             # Checksum
             if verbose == 1:
                 print("Verifying disk backup integrity...")
-            if (disker.disk_check_sum()):
+            if disker.disk_check_sum():
                 print("Disk " + disk + " backed up successfully!")   # Remove Line
             else:
                 print("Disk " + disk + " backup failed!\nExiting...")            # Remove Line
@@ -85,7 +91,6 @@ def main(args):
                 print("Removing snapshot...")
             snapper.remove()
 
-            print("Disk backup completed successfully.")
             exit(0)
         elif arglength == 2:
             if sys.argv[1] == "--oneshot":
@@ -99,8 +104,6 @@ def main(args):
                     print("Removing snapshot...")
                 snapper.remove()
 
-                if verbose == 1:
-                    print("Disk backup completed successfully.")
                 exit(0)
             elif sys.argv[1] == "--bz2":
                 # Copy disk
@@ -111,7 +114,7 @@ def main(args):
                 # Checksum
                 if verbose == 1:
                     print("Verifying disk backup integrity...")
-                if (disker.disk_check_sum()):
+                if disker.disk_check_sum():
                     print("Disk " + disk + " backed up successfully!")  # Remove Line
                 else:
                     print("Disk " + disk + " backup failed!\nExiting...")  # Remove Line
