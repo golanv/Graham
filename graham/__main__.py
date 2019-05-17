@@ -4,8 +4,7 @@ from classes.Mailer import Mailer
 import sys
 import configparser
 from time import sleep
-
-__version__ = "0.2.1"
+import version
 
 
 def validate_sysargs(arglist):
@@ -15,7 +14,7 @@ def validate_sysargs(arglist):
         if (arglist[1] == "--bz2") or (arglist[1] == "--oneshot"):
             return True
         elif arglist[1] == "--version":
-            print("graham-" + __version__)
+            print("graham-" + version.__version__)
             exit(0)
     elif len(arglist) == 3:
         if (sys.argv[1] == "--oneshot" and sys.argv[2] == "--bz2") or \
