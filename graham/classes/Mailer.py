@@ -20,13 +20,6 @@ class Mailer:
         self.msg['To'] = rcpt_to
 
     def sendtextmail(self):
-        # Tests
-        print("mail from:", self.mail_from)
-        print("rcpt to:", self.rcpt_to)
-        print("subject: ", self.subject)
-        print("message: ", self.msg)
-        print("server: ", self.server)
-
         smtp = smtplib.SMTP(self.server)
         smtp.sendmail(self.mail_from, [self.rcpt_to], self.msg.as_string())
         smtp.quit()
