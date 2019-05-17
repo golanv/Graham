@@ -166,7 +166,7 @@ def main(args):
         if sendmail == "1":
             if verbose == 1:
                 print("Sending email...")
-            subject = "[graham] Backup of disk " + disk + " complete"
+            subject = "[graham] Backup of disk \"" + disk + "\" complete"
             mailer = Mailer(mail_from, rcpt_to, subject, msg, server)
             mailer.sendtextmail()
 
