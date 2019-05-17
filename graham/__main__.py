@@ -5,6 +5,8 @@ import sys
 import configparser
 from time import sleep
 
+__version__ = "0.2.1"
+
 
 def validate_sysargs(arglist):
     if len(arglist) == 1:
@@ -12,6 +14,9 @@ def validate_sysargs(arglist):
     elif len(arglist) == 2:
         if (arglist[1] == "--bz2") or (arglist[1] == "--oneshot"):
             return True
+        elif arglist[1] == "--version":
+            print("graham-" + __version__)
+            exit(0)
     elif len(arglist) == 3:
         if (sys.argv[1] == "--oneshot" and sys.argv[2] == "--bz2") or \
                 (sys.argv[1] == "--bz2" and sys.argv[2] == "--oneshot"):
