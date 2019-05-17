@@ -1,22 +1,32 @@
 import smtplib
 from email.mime.text import MIMEText
 
+
 class Mailer:
-    server = None
-    mailFrom = None
-    rcptTo = None
+    mail_from = None
+    rcpt_to = None
+    subject = None
     msg = None
     server = None
     
-    def __init__(self, mailFrom, rcptTo, subject, text, server):
+    def __init__(self, mail_from, rcpt_to, subject, text, server):
+        self.mail_from = mail_from
+        self.rcpt_to = rcpt_to
+        self.subject = subject
         self.server = server
         self.msg = MIMEText(text)
-        self.msg['From'] = mailFrom
+        self.msg['From'] = mail_from
         self.msg['Subject'] = subject
-        self.msg['To'] = rcptTo
-        
-        
+        self.msg['To'] = rcpt_to
+
     def sendtextmail(self):
+        # Tests
+        print("mail from:", self.mail_from)
+        print("rcpt to:", self.rcpt_to)
+        print("subject: ", self.subject)
+        print("message: ", self.msg)
+        print("server: ", self.server)
+
         smtp = smtplib.SMTP(self.server)
-        smtp.sendmail(self.mailFrom, [self.rcptTo], self.msg.as_string())
+        smtp.sendmail(self.mail_from, [self.rcpt_to], self.msg.as_string())
         smtp.quit()

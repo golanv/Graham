@@ -1,5 +1,6 @@
 from classes.Disk import Disk
 from classes.Snapshot import Snapshot
+from classes.Mailer import Mailer
 import sys
 import configparser
 from time import sleep
@@ -50,7 +51,13 @@ def main(args):
     config.read('/etc/graham.conf')
     destPath = config['DEFAULT']['destination']
     pool = config['DEFAULT']['pool']
-    disks = config['DEFAULT']['disk'].split(",")
+    disks = config['DEFAULT']['disks'].split(",")
+
+    sendmail = config['MAIL']['sendmail']
+    mail_from = config['MAIL']['mail_sender']
+    rcpt_to = config['MAIL']['mail_recipient']
+    server = config['MAIL']['server']
+    msg = "See subject!"
 
     for disk in disks:
         # Create snapshot and disk object instances
@@ -90,8 +97,6 @@ def main(args):
             if verbose == 1:
                 print("Removing snapshot...")
             snapper.remove()
-
-            exit(0)
         elif arglength == 2:
             if sys.argv[1] == "--oneshot":
                 # Copy disk
@@ -103,8 +108,6 @@ def main(args):
                 if verbose == 1:
                     print("Removing snapshot...")
                 snapper.remove()
-
-                exit(0)
             elif sys.argv[1] == "--bz2":
                 # Copy disk
                 if verbose == 1:
@@ -138,7 +141,6 @@ def main(args):
 
                 if verbose == 1:
                     print("Disk backup completed successfully.")
-                exit(0)
         elif arglength == 3:
             # Compress disk
             if verbose == 1:
@@ -152,11 +154,18 @@ def main(args):
 
             if verbose == 1:
                 print("Disk backup completed successfully.")
-            exit(0)
         else:
             print("Use a valid argument.")
             exit(0)
 
-        
+        # Mailer
+        if sendmail == "1":
+            if verbose == 1:
+                print("Sending email...")
+            subject = "[graham] Backup of disk " + disk + " complete"
+            mailer = Mailer(mail_from, rcpt_to, subject, msg, server)
+            mailer.sendtextmail()
+
+
 if __name__ == '__main__':
     main(sys.argv)
