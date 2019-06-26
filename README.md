@@ -6,6 +6,7 @@ If running Graham from a cron job, you may want to call graham from a bash scrip
 
 ```bash
 #!/bin/bash
+# /usr/local/sbin/graham
 PATH=/usr/bin:/usr/sbin
 
 # Mount backup disks
@@ -18,3 +19,9 @@ mount /dev/sdb1 /mnt/backup
 rsync -avhup /mnt/backup/* backupser@backuphost.example.com:/backup/
 ```
 
+A sample cron job:
+
+```
+#Mins   Hours   Days    Months  Day of week     Command
+0       0       *       *       6             /usr/local/sbin/graham &> /var/log/graham-backup.log
+```
